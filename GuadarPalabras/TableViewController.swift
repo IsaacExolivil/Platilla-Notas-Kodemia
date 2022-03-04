@@ -82,7 +82,37 @@ class TableViewController: UITableViewController {
         }
     
     func guardarPalabra(palabra: String) {
+        // 1)Para guardar o recuperar datos en Core Data necesitamos un objeto del tipo "managedObjectContext", podemos verlo como una libreta de apuntes o borradores donde trabajas con objetos del tipo "NS managed Object".
         
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        
+        let managedContext = appDelegate!.persistentContainer.viewContext
+        
+        //Puedes verlo como que primero pones un nuevo objeto del tipo "managed Object" dentro de tu "libreta de apuntes o borradores" (managedObjectContext) y una vez que tengas preparado tu objeto "NS managed Object" a como tu lo quieres ya le puedes decir a tu "libreta de apuntes" (managedObjectContext) que guarde los cambios en el "disco duro" de tu app.
+        
+    
+        
+        
+        // 2)Entonces creamos un objeto del tipo "NSManagedObject" por medio de la definicion de clase "Entity" y con la ayuda de tu objeto de tipo "managedObjectContext"
+        let entity = NSEntityDescription.entity(forEntityName: "Lista", in: managedContext)!
+      
+        let managedObject = NSManagedObject(entity: entity, insertInto: managedContext)
+        
+        
+        
+        // 3) Le añadimos valores a las propiedades de dicho objeto (en este caso solo tenemos la propiedad de "palabra")
+        managedObject.setValue(palabra, forKeyPath: "palabra")
+    
+        
+        
+        //4) Y con la ayuda de nuestro objeto del tipo "managedObjectContext" (libreta de apuntes o borradores), guardamos los cambios
+        
+        do {
+            try managedContext.save()
+            managedObjects.append(managedObject)
+        } catch let error as NSError {
+            print("No se pudo guardar, error: \(error), \(error.userInfo)")
+        }
         
     }
     }
